@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Counter</title>
+</head>
+<body onload="getCounter()">
+
+<h1>Counter</h1>
+<p>Value: </p>
+<p id="increment"></p>
+
+<button onclick="increment()">Increment</button>
+
+<script>
+function increment() {
+	var headers = new Headers();
+	headers.append("Content-Type", "application/json");
+	var raw = JSON.stringify({"increment":1});
+
+	var requestOptions = {
+  	method: 'POST',
+  	redirect: 'follow',
+  	headers: headers,
+    body: raw
+	};
+
+	fetch("http://localhost:8080/counter", requestOptions)
+  	.then(response => response.json())
+ 	.then(result => getCounter())
+  	.catch(error => console.log('error', error));
+}
+
+function getCounter() {
+	var requestOptions = {
+  	method: 'GET',
+  	redirect: 'follow'
+	};
+
+	fetch("http://localhost:8080/counter", requestOptions)
+  	.then(response => response.json())
+  	.then(result => document.getElementById("increment").innerHTML = result.value)
+  	.catch(error => console.log('error', error));
+}
+</script>
+
+</body>
+</html>
